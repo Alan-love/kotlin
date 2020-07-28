@@ -15,11 +15,12 @@ import org.jetbrains.kotlin.descriptors.impl.EmptyPackageFragmentDescriptor
 import org.jetbrains.kotlin.incremental.components.NoLookupLocation
 import org.jetbrains.kotlin.ir.*
 import org.jetbrains.kotlin.ir.backend.js.ir.JsIrBuilder
-import org.jetbrains.kotlin.ir.backend.js.ir.JsIrDeclarationBuilder
 import org.jetbrains.kotlin.ir.backend.js.lower.JsInnerClassesSupport
 import org.jetbrains.kotlin.ir.backend.js.utils.OperatorNames
+import org.jetbrains.kotlin.ir.builders.declarations.addFunction
 import org.jetbrains.kotlin.ir.declarations.*
 import org.jetbrains.kotlin.ir.declarations.impl.IrExternalPackageFragmentImpl
+import org.jetbrains.kotlin.ir.declarations.impl.IrFactoryImpl
 import org.jetbrains.kotlin.ir.declarations.impl.IrFileImpl
 import org.jetbrains.kotlin.ir.descriptors.IrBuiltIns
 import org.jetbrains.kotlin.ir.symbols.*
@@ -54,7 +55,7 @@ class JsIrBackendContext(
 
     override var inVerbosePhase: Boolean = false
 
-    override val jsIrDeclarationBuilder: JsIrDeclarationBuilder = JsIrDeclarationBuilder()
+    override val irFactory: IrFactory = IrFactoryImpl
 
     val devMode = configuration[JSConfigurationKeys.DEVELOPER_MODE] ?: false
 
@@ -126,9 +127,12 @@ class JsIrBackendContext(
     fun createTestContainerFun(module: IrModuleFragment): IrSimpleFunction {
         return testContainerFuns.getOrPut(module) {
             val file = syntheticFile("tests", module)
-            jsIrDeclarationBuilder.buildFunction("test fun", irBuiltIns.unitType, file).apply {
-                body = JsIrBuilder.buildBlockBody(emptyList())
-                file.declarations += this
+            irFactory.addFunction(file) {
+                name = Name.identifier("test fun")
+                returnType = irBuiltIns.unitType
+                origin = JsIrBuilder.SYNTHESIZED_DECLARATION
+            }.apply {
+                body = irFactory.createBlockBody(UNDEFINED_OFFSET, UNDEFINED_OFFSET, emptyList())
             }
         }
     }
@@ -137,7 +141,7 @@ class JsIrBackendContext(
         get() = testContainerFuns
 
     override val mapping = JsMapping()
-    val innerClassesSupport = JsInnerClassesSupport(mapping)
+    val innerClassesSupport = JsInnerClassesSupport(mapping, irFactory)
 
     companion object {
         val KOTLIN_PACKAGE_FQN = FqName.fromSegments(listOf("kotlin"))

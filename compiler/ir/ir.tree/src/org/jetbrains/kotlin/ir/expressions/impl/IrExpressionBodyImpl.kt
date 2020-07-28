@@ -16,11 +16,11 @@
 
 package org.jetbrains.kotlin.ir.expressions.impl
 
+import org.jetbrains.kotlin.ir.declarations.IrFactory
 import org.jetbrains.kotlin.ir.declarations.impl.IrBodyBase
+import org.jetbrains.kotlin.ir.declarations.impl.IrFactoryImpl
 import org.jetbrains.kotlin.ir.expressions.IrExpression
 import org.jetbrains.kotlin.ir.expressions.IrExpressionBody
-import org.jetbrains.kotlin.ir.visitors.IrElementTransformer
-import org.jetbrains.kotlin.ir.visitors.IrElementVisitor
 
 class IrExpressionBodyImpl private constructor(
     startOffset: Int,
@@ -36,7 +36,7 @@ class IrExpressionBodyImpl private constructor(
     constructor(startOffset: Int, endOffset: Int, expression: IrExpression) : this(startOffset, endOffset, expression, null)
 
     constructor(startOffset: Int, endOffset: Int, initializer: IrExpressionBody.() -> Unit) :
-        this(startOffset, endOffset, null, initializer)
+            this(startOffset, endOffset, null, initializer)
 
     override var expression: IrExpression
         get() = checkEnabled { expressionField!! }
@@ -44,14 +44,6 @@ class IrExpressionBodyImpl private constructor(
             checkEnabled { expressionField = e }
         }
 
-    override fun <R, D> accept(visitor: IrElementVisitor<R, D>, data: D): R =
-        visitor.visitExpressionBody(this, data)
-
-    override fun <D> acceptChildren(visitor: IrElementVisitor<Unit, D>, data: D) {
-        expression.accept(visitor, data)
-    }
-
-    override fun <D> transformChildren(transformer: IrElementTransformer<D>, data: D) {
-        expression = expression.transform(transformer, data)
-    }
+    override val factory: IrFactory
+        get() = IrFactoryImpl
 }

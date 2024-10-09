@@ -83,6 +83,30 @@ public class FirIdeNormalAnalysisSourceModuleCompilerFacilityTestGenerated exten
   }
 
   @Test
+  @TestMetadata("inlineFuncCycle.kt")
+  public void testInlineFuncCycle() {
+    runTest("analysis/analysis-api/testData/components/compilerFacility/compilation/inlineFuncCycle.kt");
+  }
+
+  @Test
+  @TestMetadata("inlineFuncCycle2.kt")
+  public void testInlineFuncCycle2() {
+    runTest("analysis/analysis-api/testData/components/compilerFacility/compilation/inlineFuncCycle2.kt");
+  }
+
+  @Test
+  @TestMetadata("inlineFuncInDependencyOfDependency.kt")
+  public void testInlineFuncInDependencyOfDependency() {
+    runTest("analysis/analysis-api/testData/components/compilerFacility/compilation/inlineFuncInDependencyOfDependency.kt");
+  }
+
+  @Test
+  @TestMetadata("inlineFunctionsInSameFile.kt")
+  public void testInlineFunctionsInSameFile() {
+    runTest("analysis/analysis-api/testData/components/compilerFacility/compilation/inlineFunctionsInSameFile.kt");
+  }
+
+  @Test
   @TestMetadata("internalUsage.kt")
   public void testInternalUsage() {
     runTest("analysis/analysis-api/testData/components/compilerFacility/compilation/internalUsage.kt");
@@ -104,6 +128,42 @@ public class FirIdeNormalAnalysisSourceModuleCompilerFacilityTestGenerated exten
   @TestMetadata("simple.kt")
   public void testSimple() {
     runTest("analysis/analysis-api/testData/components/compilerFacility/compilation/simple.kt");
+  }
+
+  @Test
+  @TestMetadata("sourceLibModuleInlineFunc.kt")
+  public void testSourceLibModuleInlineFunc() {
+    runTest("analysis/analysis-api/testData/components/compilerFacility/compilation/sourceLibModuleInlineFunc.kt");
+  }
+
+  @Test
+  @TestMetadata("sourceLibModuleInlineFuncChains.kt")
+  public void testSourceLibModuleInlineFuncChains() {
+    runTest("analysis/analysis-api/testData/components/compilerFacility/compilation/sourceLibModuleInlineFuncChains.kt");
+  }
+
+  @Test
+  @TestMetadata("sourceLibModuleInlineFuncOfCompanion.kt")
+  public void testSourceLibModuleInlineFuncOfCompanion() {
+    runTest("analysis/analysis-api/testData/components/compilerFacility/compilation/sourceLibModuleInlineFuncOfCompanion.kt");
+  }
+
+  @Test
+  @TestMetadata("sourceLibModuleInlineFuncOfInnerClass.kt")
+  public void testSourceLibModuleInlineFuncOfInnerClass() {
+    runTest("analysis/analysis-api/testData/components/compilerFacility/compilation/sourceLibModuleInlineFuncOfInnerClass.kt");
+  }
+
+  @Test
+  @TestMetadata("sourceLibModuleInlineFuncRef.kt")
+  public void testSourceLibModuleInlineFuncRef() {
+    runTest("analysis/analysis-api/testData/components/compilerFacility/compilation/sourceLibModuleInlineFuncRef.kt");
+  }
+
+  @Test
+  @TestMetadata("sourceLibModuleInlinePropertyGetter.kt")
+  public void testSourceLibModuleInlinePropertyGetter() {
+    runTest("analysis/analysis-api/testData/components/compilerFacility/compilation/sourceLibModuleInlinePropertyGetter.kt");
   }
 
   @Nested
@@ -179,6 +239,12 @@ public class FirIdeNormalAnalysisSourceModuleCompilerFacilityTestGenerated exten
     @TestMetadata("imports.kt")
     public void testImports() {
       runTest("analysis/analysis-api/testData/components/compilerFacility/compilation/codeFragments/imports.kt");
+    }
+
+    @Test
+    @TestMetadata("inaccessibleAnnotation.kt")
+    public void testInaccessibleAnnotation() {
+      runTest("analysis/analysis-api/testData/components/compilerFacility/compilation/codeFragments/inaccessibleAnnotation.kt");
     }
 
     @Test

@@ -266,6 +266,14 @@ sealed interface KaFirDiagnostic<PSI : PsiElement> : KaDiagnosticWithPsi<PSI> {
         override val diagnosticClass get() = RedundantInterpolationPrefix::class
     }
 
+    interface WrappedLhsInAssignmentError : KaFirDiagnostic<PsiElement> {
+        override val diagnosticClass get() = WrappedLhsInAssignmentError::class
+    }
+
+    interface WrappedLhsInAssignmentWarning : KaFirDiagnostic<PsiElement> {
+        override val diagnosticClass get() = WrappedLhsInAssignmentWarning::class
+    }
+
     interface InvisibleReference : KaFirDiagnostic<PsiElement> {
         override val diagnosticClass get() = InvisibleReference::class
         val reference: KaSymbol
@@ -458,18 +466,6 @@ sealed interface KaFirDiagnostic<PSI : PsiElement> : KaDiagnosticWithPsi<PSI> {
     interface AmbiguousAlteredAssign : KaFirDiagnostic<PsiElement> {
         override val diagnosticClass get() = AmbiguousAlteredAssign::class
         val altererNames: List<String?>
-    }
-
-    interface ForbiddenBinaryMod : KaFirDiagnostic<PsiElement> {
-        override val diagnosticClass get() = ForbiddenBinaryMod::class
-        val forbiddenFunction: KaSymbol
-        val suggestedFunction: String
-    }
-
-    interface DeprecatedBinaryMod : KaFirDiagnostic<PsiElement> {
-        override val diagnosticClass get() = DeprecatedBinaryMod::class
-        val forbiddenFunction: KaSymbol
-        val suggestedFunction: String
     }
 
     interface SelfCallInNestedObjectConstructorError : KaFirDiagnostic<PsiElement> {
@@ -874,6 +870,12 @@ sealed interface KaFirDiagnostic<PSI : PsiElement> : KaDiagnosticWithPsi<PSI> {
         val allowedTargets: List<KotlinTarget>
     }
 
+    interface WrongAnnotationTargetWarning : KaFirDiagnostic<KtAnnotationEntry> {
+        override val diagnosticClass get() = WrongAnnotationTargetWarning::class
+        val actualTarget: String
+        val allowedTargets: List<KotlinTarget>
+    }
+
     interface WrongAnnotationTargetWithUseSiteTarget : KaFirDiagnostic<KtAnnotationEntry> {
         override val diagnosticClass get() = WrongAnnotationTargetWithUseSiteTarget::class
         val actualTarget: String
@@ -1145,7 +1147,7 @@ sealed interface KaFirDiagnostic<PSI : PsiElement> : KaDiagnosticWithPsi<PSI> {
         override val diagnosticClass get() = OptInWithoutArguments::class
     }
 
-    interface OptInArgumentIsNotMarker : KaFirDiagnostic<KtAnnotationEntry> {
+    interface OptInArgumentIsNotMarker : KaFirDiagnostic<KtClassLiteralExpression> {
         override val diagnosticClass get() = OptInArgumentIsNotMarker::class
         val notMarkerClassId: ClassId
     }

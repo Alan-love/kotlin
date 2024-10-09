@@ -304,6 +304,16 @@ internal class RedundantInterpolationPrefixImpl(
     token: KaLifetimeToken,
 ) : KaAbstractFirDiagnostic<PsiElement>(firDiagnostic, token), KaFirDiagnostic.RedundantInterpolationPrefix
 
+internal class WrappedLhsInAssignmentErrorImpl(
+    firDiagnostic: KtPsiDiagnostic,
+    token: KaLifetimeToken,
+) : KaAbstractFirDiagnostic<PsiElement>(firDiagnostic, token), KaFirDiagnostic.WrappedLhsInAssignmentError
+
+internal class WrappedLhsInAssignmentWarningImpl(
+    firDiagnostic: KtPsiDiagnostic,
+    token: KaLifetimeToken,
+) : KaAbstractFirDiagnostic<PsiElement>(firDiagnostic, token), KaFirDiagnostic.WrappedLhsInAssignmentWarning
+
 internal class InvisibleReferenceImpl(
     override val reference: KaSymbol,
     override val visible: Visibility,
@@ -534,20 +544,6 @@ internal class AmbiguousAlteredAssignImpl(
     firDiagnostic: KtPsiDiagnostic,
     token: KaLifetimeToken,
 ) : KaAbstractFirDiagnostic<PsiElement>(firDiagnostic, token), KaFirDiagnostic.AmbiguousAlteredAssign
-
-internal class ForbiddenBinaryModImpl(
-    override val forbiddenFunction: KaSymbol,
-    override val suggestedFunction: String,
-    firDiagnostic: KtPsiDiagnostic,
-    token: KaLifetimeToken,
-) : KaAbstractFirDiagnostic<PsiElement>(firDiagnostic, token), KaFirDiagnostic.ForbiddenBinaryMod
-
-internal class DeprecatedBinaryModImpl(
-    override val forbiddenFunction: KaSymbol,
-    override val suggestedFunction: String,
-    firDiagnostic: KtPsiDiagnostic,
-    token: KaLifetimeToken,
-) : KaAbstractFirDiagnostic<PsiElement>(firDiagnostic, token), KaFirDiagnostic.DeprecatedBinaryMod
 
 internal class SelfCallInNestedObjectConstructorErrorImpl(
     firDiagnostic: KtPsiDiagnostic,
@@ -1045,6 +1041,13 @@ internal class WrongAnnotationTargetImpl(
     token: KaLifetimeToken,
 ) : KaAbstractFirDiagnostic<KtAnnotationEntry>(firDiagnostic, token), KaFirDiagnostic.WrongAnnotationTarget
 
+internal class WrongAnnotationTargetWarningImpl(
+    override val actualTarget: String,
+    override val allowedTargets: List<KotlinTarget>,
+    firDiagnostic: KtPsiDiagnostic,
+    token: KaLifetimeToken,
+) : KaAbstractFirDiagnostic<KtAnnotationEntry>(firDiagnostic, token), KaFirDiagnostic.WrongAnnotationTargetWarning
+
 internal class WrongAnnotationTargetWithUseSiteTargetImpl(
     override val actualTarget: String,
     override val useSiteTarget: String,
@@ -1379,7 +1382,7 @@ internal class OptInArgumentIsNotMarkerImpl(
     override val notMarkerClassId: ClassId,
     firDiagnostic: KtPsiDiagnostic,
     token: KaLifetimeToken,
-) : KaAbstractFirDiagnostic<KtAnnotationEntry>(firDiagnostic, token), KaFirDiagnostic.OptInArgumentIsNotMarker
+) : KaAbstractFirDiagnostic<KtClassLiteralExpression>(firDiagnostic, token), KaFirDiagnostic.OptInArgumentIsNotMarker
 
 internal class OptInMarkerWithWrongTargetImpl(
     override val target: String,

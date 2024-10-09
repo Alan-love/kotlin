@@ -209,7 +209,6 @@ import org.jetbrains.kotlin.fir.analysis.diagnostics.FirErrors.DEPRECATED_ACCESS
 import org.jetbrains.kotlin.fir.analysis.diagnostics.FirErrors.DEPRECATED_ACCESS_TO_ENTRY_PROPERTY_FROM_ENUM
 import org.jetbrains.kotlin.fir.analysis.diagnostics.FirErrors.DEPRECATED_ACCESS_TO_ENUM_ENTRY_COMPANION_PROPERTY
 import org.jetbrains.kotlin.fir.analysis.diagnostics.FirErrors.DEPRECATED_ACCESS_TO_ENUM_ENTRY_PROPERTY_AS_REFERENCE
-import org.jetbrains.kotlin.fir.analysis.diagnostics.FirErrors.DEPRECATED_BINARY_MOD
 import org.jetbrains.kotlin.fir.analysis.diagnostics.FirErrors.DEPRECATED_DECLARATION_OF_ENUM_ENTRY
 import org.jetbrains.kotlin.fir.analysis.diagnostics.FirErrors.DEPRECATED_IDENTITY_EQUALS
 import org.jetbrains.kotlin.fir.analysis.diagnostics.FirErrors.DEPRECATED_MODIFIER
@@ -292,7 +291,6 @@ import org.jetbrains.kotlin.fir.analysis.diagnostics.FirErrors.FINAL_UPPER_BOUND
 import org.jetbrains.kotlin.fir.analysis.diagnostics.FirErrors.FINITE_BOUNDS_VIOLATION
 import org.jetbrains.kotlin.fir.analysis.diagnostics.FirErrors.FINITE_BOUNDS_VIOLATION_IN_JAVA
 import org.jetbrains.kotlin.fir.analysis.diagnostics.FirErrors.FLOAT_LITERAL_OUT_OF_RANGE
-import org.jetbrains.kotlin.fir.analysis.diagnostics.FirErrors.FORBIDDEN_BINARY_MOD
 import org.jetbrains.kotlin.fir.analysis.diagnostics.FirErrors.FORBIDDEN_IDENTITY_EQUALS
 import org.jetbrains.kotlin.fir.analysis.diagnostics.FirErrors.FORBIDDEN_IDENTITY_EQUALS_WARNING
 import org.jetbrains.kotlin.fir.analysis.diagnostics.FirErrors.FORBIDDEN_VARARG_PARAMETER_TYPE
@@ -539,6 +537,7 @@ import org.jetbrains.kotlin.fir.analysis.diagnostics.FirErrors.OVERRIDING_FINAL_
 import org.jetbrains.kotlin.fir.analysis.diagnostics.FirErrors.OVERRIDING_FINAL_MEMBER_BY_DELEGATION
 import org.jetbrains.kotlin.fir.analysis.diagnostics.FirErrors.PACKAGE_CANNOT_BE_IMPORTED
 import org.jetbrains.kotlin.fir.analysis.diagnostics.FirErrors.PACKAGE_CONFLICTS_WITH_CLASSIFIER
+import org.jetbrains.kotlin.fir.analysis.diagnostics.FirErrors.WRAPPED_LHS_IN_ASSIGNMENT
 import org.jetbrains.kotlin.fir.analysis.diagnostics.FirErrors.PLATFORM_CLASS_MAPPED_TO_KOTLIN
 import org.jetbrains.kotlin.fir.analysis.diagnostics.FirErrors.PLUGIN_AMBIGUOUS_INTERCEPTED_SYMBOL
 import org.jetbrains.kotlin.fir.analysis.diagnostics.FirErrors.POTENTIALLY_NON_REPORTED_ANNOTATION
@@ -758,6 +757,7 @@ import org.jetbrains.kotlin.fir.analysis.diagnostics.FirErrors.VOLATILE_ON_DELEG
 import org.jetbrains.kotlin.fir.analysis.diagnostics.FirErrors.VOLATILE_ON_VALUE
 import org.jetbrains.kotlin.fir.analysis.diagnostics.FirErrors.WHEN_GUARD_WITHOUT_SUBJECT
 import org.jetbrains.kotlin.fir.analysis.diagnostics.FirErrors.WRONG_ANNOTATION_TARGET
+import org.jetbrains.kotlin.fir.analysis.diagnostics.FirErrors.WRONG_ANNOTATION_TARGET_WARNING
 import org.jetbrains.kotlin.fir.analysis.diagnostics.FirErrors.WRONG_ANNOTATION_TARGET_WITH_USE_SITE_TARGET
 import org.jetbrains.kotlin.fir.analysis.diagnostics.FirErrors.WRONG_CONDITION_SUGGEST_GUARD
 import org.jetbrains.kotlin.fir.analysis.diagnostics.FirErrors.WRONG_EXTENSION_FUNCTION_TYPE
@@ -904,6 +904,10 @@ object FirErrorsDefaultMessages : BaseDiagnosticRendererFactory() {
         )
         map.put(MISSING_CONSTRUCTOR_KEYWORD, "Use the 'constructor' keyword after the modifiers of the primary constructor.")
         map.put(REDUNDANT_INTERPOLATION_PREFIX, "Redundant interpolation prefix.")
+        map.put(
+            WRAPPED_LHS_IN_ASSIGNMENT,
+            "Wrapping the left-hand side of assignments in parentheses, labels or annotations is not allowed."
+        )
         map.put(UNRESOLVED_REFERENCE, "Unresolved reference ''{0}''{1}.", NULLABLE_STRING, FOR_OPTIONAL_OPERATOR)
         map.put(UNRESOLVED_IMPORT, "Unresolved reference ''{0}''.", NULLABLE_STRING) // &
         map.put(DUPLICATE_PARAMETER_NAME_IN_FUNCTION_TYPE, "Duplicate parameter name in a function type.")
@@ -954,8 +958,6 @@ object FirErrorsDefaultMessages : BaseDiagnosticRendererFactory() {
             "Multiple extensions attempted to modify this function call. Extensions: {0}",
             COLLECTION(NULLABLE_STRING)
         )
-        map.put(DEPRECATED_BINARY_MOD, "Convention for ''{0}'' is prohibited. Use ''{1}''.", SYMBOL, STRING)
-        map.put(FORBIDDEN_BINARY_MOD, "Deprecated convention for ''{0}''. Use ''{1}''.", SYMBOL, STRING)
 
         map.put(ILLEGAL_SELECTOR, "The expression cannot be a selector (cannot occur after a dot).")
         map.put(NO_RECEIVER_ALLOWED, "No receiver can be passed to this function or property.")
@@ -1138,6 +1140,7 @@ object FirErrorsDefaultMessages : BaseDiagnosticRendererFactory() {
         map.put(ANNOTATION_ON_SUPERCLASS, "Annotations on superclasses are meaningless.")
         map.put(RESTRICTED_RETENTION_FOR_EXPRESSION_ANNOTATION, "Expression annotations with retention other than SOURCE are prohibited.")
         map.put(WRONG_ANNOTATION_TARGET, "This annotation is not applicable to target ''{0}''. Applicable targets: {1}", TO_STRING, KOTLIN_TARGETS)
+        map.put(WRONG_ANNOTATION_TARGET_WARNING, "Application of this annotation to target ''{0}'' will be forbidden soon. Applicable targets: {1}", TO_STRING, KOTLIN_TARGETS)
         map.put(INAPPLICABLE_TARGET_ON_PROPERTY, "''@{0}:'' annotations can only be applied to property declarations.", TO_STRING)
         map.put(
             INAPPLICABLE_TARGET_ON_PROPERTY_WARNING,
@@ -1388,7 +1391,7 @@ object FirErrorsDefaultMessages : BaseDiagnosticRendererFactory() {
         map.put(REDUNDANT_SPREAD_OPERATOR_IN_NAMED_FORM_IN_ANNOTATION, "Redundant spread (*) operator.")
         map.put(REDUNDANT_SPREAD_OPERATOR_IN_NAMED_FORM_IN_FUNCTION, "Redundant spread (*) operator.")
         map.put(INFERENCE_UNSUCCESSFUL_FORK, "Unsuccessful inference fork at position ''{0}''.", TO_STRING)
-        map.put(NESTED_CLASS_ACCESSED_VIA_INSTANCE_REFERENCE, "Nested {0} accessed via instance reference", RENDER_CLASS_OR_OBJECT_NAME_QUOTED)
+        map.put(NESTED_CLASS_ACCESSED_VIA_INSTANCE_REFERENCE, "Nested {0} accessed via instance reference.", RENDER_CLASS_OR_OBJECT_NAME_QUOTED)
         map.put(
             INFERRED_TYPE_VARIABLE_INTO_EMPTY_INTERSECTION,
             "Type argument for type parameter ''{0}'' cannot be inferred because it has incompatible upper bounds: {1} ({2}{3}).",
@@ -1522,7 +1525,7 @@ object FirErrorsDefaultMessages : BaseDiagnosticRendererFactory() {
         )
 
         map.put(TYPE_ARGUMENTS_NOT_ALLOWED, "Type arguments are not allowed {0}.", STRING)
-        map.put(TYPE_ARGUMENTS_FOR_OUTER_CLASS_WHEN_NESTED_REFERENCED, "Type arguments for outer class are redundant when nested class is referenced")
+        map.put(TYPE_ARGUMENTS_FOR_OUTER_CLASS_WHEN_NESTED_REFERENCED, "Type arguments for outer class are redundant when nested class is referenced.")
         val wrongNumberOfTypeArguments = "{0,choice,0#No type arguments|1#One type argument|1<{0,number,integer} type arguments} expected"
         map.put(
             WRONG_NUMBER_OF_TYPE_ARGUMENTS,
@@ -1858,7 +1861,7 @@ object FirErrorsDefaultMessages : BaseDiagnosticRendererFactory() {
             CALLABLES_FQ_NAMES,
         )
 
-        map.put(TYPEALIAS_EXPANDS_TO_ARRAY_OF_NOTHINGS, "Type alias expanded to malformed type ''{0}''", RENDER_TYPE)
+        map.put(TYPEALIAS_EXPANDS_TO_ARRAY_OF_NOTHINGS, "Type alias expanded to malformed type ''{0}''.", RENDER_TYPE)
 
         map.put(OVERRIDING_FINAL_MEMBER, "''{0}'' in ''{1}'' is final and cannot be overridden.", DECLARATION_NAME, TO_STRING)
 
@@ -2065,7 +2068,7 @@ object FirErrorsDefaultMessages : BaseDiagnosticRendererFactory() {
         map.put(REDECLARATION, "Conflicting declarations:{0}", SYMBOLS_ON_NEXT_LINES)
         map.put(CLASSIFIER_REDECLARATION, "Redeclaration:{0}", SYMBOLS_ON_NEXT_LINES)
         map.put(PACKAGE_CONFLICTS_WITH_CLASSIFIER, "Package conflicts with classifier {0}", CLASS_ID)
-        map.put(EXPECT_AND_ACTUAL_IN_THE_SAME_MODULE, "{0}: expect and corresponding actual are declared in the same module", DECLARATION_NAME)
+        map.put(EXPECT_AND_ACTUAL_IN_THE_SAME_MODULE, "{0}: expect and corresponding actual are declared in the same module.", DECLARATION_NAME)
 
         map.put(METHOD_OF_ANY_IMPLEMENTED_IN_INTERFACE, "Interfaces cannot implement a method of 'Any'.")
         map.put(EXTENSION_SHADOWED_BY_MEMBER, "This extension is shadowed by a member: {0}.", SYMBOL_WITH_CONTAINING_DECLARATION)
@@ -2310,11 +2313,11 @@ object FirErrorsDefaultMessages : BaseDiagnosticRendererFactory() {
         )
         map.put(
             ACTUAL_TYPE_ALIAS_TO_NULLABLE_TYPE,
-            "Right-hand side of actual type alias cannot be a nullable type"
+            "Right-hand side of actual type alias cannot be a nullable type."
         )
         map.put(
             ACTUAL_TYPE_ALIAS_TO_NOTHING,
-            "Right-hand side of actual type alias cannot be of type kotlin.Nothing"
+            "Right-hand side of actual type alias cannot be of type 'kotlin.Nothing'."
         )
         map.put(
             ACTUAL_FUNCTION_WITH_DEFAULT_ARGUMENTS,
@@ -2376,15 +2379,15 @@ object FirErrorsDefaultMessages : BaseDiagnosticRendererFactory() {
         )
         map.put(
             OPTIONAL_DECLARATION_OUTSIDE_OF_ANNOTATION_ENTRY,
-            "Declaration annotated with '@OptionalExpectation' can only be used inside an annotation entry"
+            "Declaration annotated with '@OptionalExpectation' can only be used inside an annotation entry."
         )
         map.put(
             OPTIONAL_DECLARATION_USAGE_IN_NON_COMMON_SOURCE,
-            "Declaration annotated with '@OptionalExpectation' can only be used in common module sources"
+            "Declaration annotated with '@OptionalExpectation' can only be used in common module sources."
         )
         map.put(
             OPTIONAL_EXPECTATION_NOT_ON_EXPECTED,
-            "'@OptionalExpectation' can only be used on an expected annotation class"
+            "'@OptionalExpectation' can only be used on an expected annotation class."
         )
 
         // Destructuring declaration
@@ -2519,7 +2522,7 @@ object FirErrorsDefaultMessages : BaseDiagnosticRendererFactory() {
             WHEN_MISSING_CASES
         )
         map.put(ELSE_MISPLACED_IN_WHEN, "'else' entry must be the last one in a 'when' expression.")
-        map.put(REDUNDANT_ELSE_IN_WHEN, "'when' is exhaustive so 'else' is redundant here")
+        map.put(REDUNDANT_ELSE_IN_WHEN, "'when' is exhaustive so 'else' is redundant here.")
         map.put(
             COMMA_IN_WHEN_CONDITION_WITHOUT_ARGUMENT,
             "Use '||' instead of commas in conditions of 'when' without a subject."
@@ -2853,7 +2856,7 @@ object FirErrorsDefaultMessages : BaseDiagnosticRendererFactory() {
             " See https://youtrack.jetbrains.com/issue/KT-49264"
         )
         map.put(RETURN_FOR_BUILT_IN_SUSPEND, "Using implicit label for this lambda is prohibited.")
-        map.put(MIXING_SUSPEND_AND_NON_SUSPEND_SUPERTYPES, "Mixing suspend and non-suspend supertypes is not allowed")
+        map.put(MIXING_SUSPEND_AND_NON_SUSPEND_SUPERTYPES, "Mixing suspend and non-suspend supertypes is not allowed.")
         map.put(
             MIXING_FUNCTIONAL_KINDS_IN_SUPERTYPES,
             "Mixing supertypes of different functional kinds ({0}) is not allowed.",
@@ -2927,7 +2930,7 @@ object FirErrorsDefaultMessages : BaseDiagnosticRendererFactory() {
         )
         map.put(
             PRE_RELEASE_CLASS,
-            "{0} is compiled by a pre-release version of Kotlin and cannot be loaded by this version of the compiler",
+            "{0} is compiled by a pre-release version of Kotlin and cannot be loaded by this version of the compiler.",
             STRING
         )
         map.put(
@@ -2938,13 +2941,13 @@ object FirErrorsDefaultMessages : BaseDiagnosticRendererFactory() {
 
         map.put(
             BUILDER_INFERENCE_STUB_RECEIVER,
-            "The type of a receiver hasn''t been inferred yet. Please specify type argument for generic parameter ''{0}'' of ''{1}'' explicitly",
+            "The type of a receiver hasn''t been inferred yet. Please specify type argument for generic parameter ''{0}'' of ''{1}'' explicitly.",
             TO_STRING,
             TO_STRING
         )
         map.put(
             BUILDER_INFERENCE_MULTI_LAMBDA_RESTRICTION,
-            "Unstable inference behaviour with multiple lambdas. Please specify the type argument for generic parameter ''{0}'' of ''{1}'' explicitly",
+            "Unstable inference behaviour with multiple lambdas. Please specify the type argument for generic parameter ''{0}'' of ''{1}'' explicitly.",
             TO_STRING,
             TO_STRING
         )

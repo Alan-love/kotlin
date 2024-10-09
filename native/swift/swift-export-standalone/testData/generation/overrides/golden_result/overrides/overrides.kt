@@ -1,9 +1,37 @@
+@file:kotlin.native.internal.objc.BindClassToObjCName(AbstractBase::class, "9overrides12AbstractBaseC")
+@file:kotlin.native.internal.objc.BindClassToObjCName(AbstractDerived2::class, "9overrides16AbstractDerived2C")
 @file:kotlin.native.internal.objc.BindClassToObjCName(Child::class, "9overrides5ChildC")
 @file:kotlin.native.internal.objc.BindClassToObjCName(GrandChild::class, "9overrides10GrandChildC")
+@file:kotlin.native.internal.objc.BindClassToObjCName(OpenDerived1::class, "9overrides12OpenDerived1C")
 @file:kotlin.native.internal.objc.BindClassToObjCName(Parent::class, "9overrides6ParentC")
 
 import kotlin.native.internal.ExportedBridge
 import kotlinx.cinterop.*
+
+@ExportedBridge("AbstractBase_abstractFun1")
+public fun AbstractBase_abstractFun1(self: kotlin.native.internal.NativePtr): Unit {
+    val __self = kotlin.native.internal.ref.dereferenceExternalRCRef(self) as AbstractBase
+    __self.abstractFun1()
+}
+
+@ExportedBridge("AbstractBase_abstractFun2")
+public fun AbstractBase_abstractFun2(self: kotlin.native.internal.NativePtr): Unit {
+    val __self = kotlin.native.internal.ref.dereferenceExternalRCRef(self) as AbstractBase
+    __self.abstractFun2()
+}
+
+@ExportedBridge("AbstractBase_abstractVal_get")
+public fun AbstractBase_abstractVal_get(self: kotlin.native.internal.NativePtr): Int {
+    val __self = kotlin.native.internal.ref.dereferenceExternalRCRef(self) as AbstractBase
+    val _result = __self.abstractVal
+    return _result
+}
+
+@ExportedBridge("AbstractDerived2_abstractFun1")
+public fun AbstractDerived2_abstractFun1(self: kotlin.native.internal.NativePtr): Unit {
+    val __self = kotlin.native.internal.ref.dereferenceExternalRCRef(self) as AbstractDerived2
+    __self.abstractFun1()
+}
 
 @ExportedBridge("Child_actuallyOverride__TypesOfArguments__Swift_Int32_opt__overrides_Parent_overrides_Parent_opt___")
 public fun Child_actuallyOverride__TypesOfArguments__Swift_Int32_opt__overrides_Parent_overrides_Parent_opt___(self: kotlin.native.internal.NativePtr, nullable: kotlin.native.internal.NativePtr, poly: kotlin.native.internal.NativePtr, nullablePoly: kotlin.native.internal.NativePtr): Unit {
@@ -18,6 +46,13 @@ public fun Child_actuallyOverride__TypesOfArguments__Swift_Int32_opt__overrides_
 public fun Child_finalOverrideFunc(self: kotlin.native.internal.NativePtr): Unit {
     val __self = kotlin.native.internal.ref.dereferenceExternalRCRef(self) as Child
     __self.finalOverrideFunc()
+}
+
+@ExportedBridge("Child_genericReturnTypeFunc")
+public fun Child_genericReturnTypeFunc(self: kotlin.native.internal.NativePtr): kotlin.native.internal.NativePtr {
+    val __self = kotlin.native.internal.ref.dereferenceExternalRCRef(self) as Child
+    val _result = __self.genericReturnTypeFunc()
+    return _result.objcPtr()
 }
 
 @ExportedBridge("Child_nonoverride")
@@ -139,6 +174,25 @@ public fun GrandChild_overrideChainFunc(self: kotlin.native.internal.NativePtr):
     __self.overrideChainFunc()
 }
 
+@ExportedBridge("OpenDerived1_abstractFun1")
+public fun OpenDerived1_abstractFun1(self: kotlin.native.internal.NativePtr): Unit {
+    val __self = kotlin.native.internal.ref.dereferenceExternalRCRef(self) as OpenDerived1
+    __self.abstractFun1()
+}
+
+@ExportedBridge("OpenDerived1_abstractFun2")
+public fun OpenDerived1_abstractFun2(self: kotlin.native.internal.NativePtr): Unit {
+    val __self = kotlin.native.internal.ref.dereferenceExternalRCRef(self) as OpenDerived1
+    __self.abstractFun2()
+}
+
+@ExportedBridge("OpenDerived1_abstractVal_get")
+public fun OpenDerived1_abstractVal_get(self: kotlin.native.internal.NativePtr): Int {
+    val __self = kotlin.native.internal.ref.dereferenceExternalRCRef(self) as OpenDerived1
+    val _result = __self.abstractVal
+    return _result
+}
+
 @ExportedBridge("Parent_actuallyOverride__TypesOfArguments__Swift_Int32_overrides_Child_overrides_Child__")
 public fun Parent_actuallyOverride__TypesOfArguments__Swift_Int32_overrides_Child_overrides_Child__(self: kotlin.native.internal.NativePtr, nullable: Int, poly: kotlin.native.internal.NativePtr, nullablePoly: kotlin.native.internal.NativePtr): Unit {
     val __self = kotlin.native.internal.ref.dereferenceExternalRCRef(self) as Parent
@@ -158,6 +212,13 @@ public fun Parent_finalOverrideFunc(self: kotlin.native.internal.NativePtr): Uni
 public fun Parent_finalOverrideHopFunc(self: kotlin.native.internal.NativePtr): Unit {
     val __self = kotlin.native.internal.ref.dereferenceExternalRCRef(self) as Parent
     __self.finalOverrideHopFunc()
+}
+
+@ExportedBridge("Parent_genericReturnTypeFunc")
+public fun Parent_genericReturnTypeFunc(self: kotlin.native.internal.NativePtr): kotlin.native.internal.NativePtr {
+    val __self = kotlin.native.internal.ref.dereferenceExternalRCRef(self) as Parent
+    val _result = __self.genericReturnTypeFunc()
+    return _result.objcPtr()
 }
 
 @ExportedBridge("Parent_hopFunc")
@@ -299,7 +360,7 @@ public fun __root___Child_init_initialize__TypesOfArguments__Swift_UInt_Swift_In
 @ExportedBridge("__root___Child_init_initialize__TypesOfArguments__Swift_UInt_Swift_String__")
 public fun __root___Child_init_initialize__TypesOfArguments__Swift_UInt_Swift_String__(__kt: kotlin.native.internal.NativePtr, value: kotlin.native.internal.NativePtr): Unit {
     val ____kt = kotlin.native.internal.ref.dereferenceExternalRCRef(__kt)
-    val __value = interpretObjCPointer<String>(value)
+    val __value = interpretObjCPointer<kotlin.String>(value)
     kotlin.native.internal.initInstance(____kt, Child(__value))
 }
 
@@ -316,6 +377,25 @@ public fun __root___GrandChild_init_initialize__TypesOfArguments__Swift_UInt_Swi
     kotlin.native.internal.initInstance(____kt, GrandChild(__value))
 }
 
+@ExportedBridge("__root___OpenDerived1_init_allocate")
+public fun __root___OpenDerived1_init_allocate(): kotlin.native.internal.NativePtr {
+    val _result = kotlin.native.internal.createUninitializedInstance<OpenDerived1>()
+    return kotlin.native.internal.ref.createRetainedExternalRCRef(_result)
+}
+
+@ExportedBridge("__root___OpenDerived1_init_initialize__TypesOfArguments__Swift_UInt__")
+public fun __root___OpenDerived1_init_initialize__TypesOfArguments__Swift_UInt__(__kt: kotlin.native.internal.NativePtr): Unit {
+    val ____kt = kotlin.native.internal.ref.dereferenceExternalRCRef(__kt)
+    kotlin.native.internal.initInstance(____kt, OpenDerived1())
+}
+
+@ExportedBridge("__root___OpenDerived1_init_initialize__TypesOfArguments__Swift_UInt_Swift_Int32__")
+public fun __root___OpenDerived1_init_initialize__TypesOfArguments__Swift_UInt_Swift_Int32__(__kt: kotlin.native.internal.NativePtr, x: Int): Unit {
+    val ____kt = kotlin.native.internal.ref.dereferenceExternalRCRef(__kt)
+    val __x = x
+    kotlin.native.internal.initInstance(____kt, OpenDerived1(__x))
+}
+
 @ExportedBridge("__root___Parent_init_allocate")
 public fun __root___Parent_init_allocate(): kotlin.native.internal.NativePtr {
     val _result = kotlin.native.internal.createUninitializedInstance<Parent>()
@@ -325,7 +405,7 @@ public fun __root___Parent_init_allocate(): kotlin.native.internal.NativePtr {
 @ExportedBridge("__root___Parent_init_initialize__TypesOfArguments__Swift_UInt_Swift_String__")
 public fun __root___Parent_init_initialize__TypesOfArguments__Swift_UInt_Swift_String__(__kt: kotlin.native.internal.NativePtr, value: kotlin.native.internal.NativePtr): Unit {
     val ____kt = kotlin.native.internal.ref.dereferenceExternalRCRef(__kt)
-    val __value = interpretObjCPointer<String>(value)
+    val __value = interpretObjCPointer<kotlin.String>(value)
     kotlin.native.internal.initInstance(____kt, Parent(__value))
 }
 

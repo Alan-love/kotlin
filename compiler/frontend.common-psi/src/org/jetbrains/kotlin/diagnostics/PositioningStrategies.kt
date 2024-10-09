@@ -234,7 +234,7 @@ object PositioningStrategies {
                 is KtPropertyAccessor -> {
                     val endOfSignatureElement =
                         element.returnTypeReference
-                            ?: element.rightParenthesis
+                            ?: element.parameterList
                             ?: element.namePlaceholder
 
                     return markRange(element, endOfSignatureElement)
@@ -276,7 +276,7 @@ object PositioningStrategies {
                 is KtPropertyAccessor -> {
                     val endOfSignatureElement =
                         element.returnTypeReference
-                            ?: element.rightParenthesis
+                            ?: element.parameterList
                             ?: element.namePlaceholder
 
                     return markRange(element.namePlaceholder, endOfSignatureElement)
@@ -1220,6 +1220,21 @@ object PositioningStrategies {
         override fun mark(element: KtElement): List<TextRange> {
             val packageNameExpression = (element as? KtPackageDirective)?.packageNameExpression
             return super.mark(packageNameExpression ?: element)
+        }
+    }
+
+    val OUTERMOST_PARENTHESES_IN_ASSIGNMENT_LHS: PositioningStrategy<PsiElement> = object : PositioningStrategy<PsiElement>() {
+        override fun mark(element: PsiElement): List<TextRange> {
+            val parenthesized = element.getAssignmentLhsIfUnwrappable() ?: return super.mark(element)
+            return super.mark(parenthesized)
+        }
+    }
+
+    val DEPRECATION: PositioningStrategy<PsiElement> = object : PositioningStrategy<PsiElement>() {
+        override fun mark(element: PsiElement): List<TextRange> {
+            if (element is KtConstructorCalleeExpression) element.typeReference?.let { return mark(it) }
+            if (element is KtTypeReference) return SELECTOR_BY_QUALIFIED.mark(element)
+            return REFERENCED_NAME_BY_QUALIFIED.mark(element)
         }
     }
 }

@@ -16,6 +16,7 @@ import org.jetbrains.kotlin.config.LanguageFeature.ForbidCompanionInLocalInnerCl
 import org.jetbrains.kotlin.config.LanguageFeature.ForbidExposingTypesInPrimaryConstructorProperties
 import org.jetbrains.kotlin.config.LanguageFeature.ForbidInferringTypeVariablesIntoEmptyIntersection
 import org.jetbrains.kotlin.config.LanguageFeature.ForbidJvmAnnotationsOnAnnotationParameters
+import org.jetbrains.kotlin.config.LanguageFeature.ForbidParenthesizedLhsInAssignments
 import org.jetbrains.kotlin.config.LanguageFeature.ForbidProjectionsInAnnotationProperties
 import org.jetbrains.kotlin.config.LanguageFeature.ForbidReifiedTypeParametersOnTypeAliases
 import org.jetbrains.kotlin.config.LanguageFeature.ForbidUsingExtensionPropertyTypeParameterInDelegate
@@ -185,6 +186,7 @@ object FirErrors {
     val ERROR_SUPPRESSION: KtDiagnosticFactory1<String> = KtDiagnosticFactory1("ERROR_SUPPRESSION", WARNING, SourceElementPositioningStrategies.DEFAULT, PsiElement::class)
     val MISSING_CONSTRUCTOR_KEYWORD: KtDiagnosticFactory0 = KtDiagnosticFactory0("MISSING_CONSTRUCTOR_KEYWORD", ERROR, SourceElementPositioningStrategies.DEFAULT, PsiElement::class)
     val REDUNDANT_INTERPOLATION_PREFIX: KtDiagnosticFactory0 = KtDiagnosticFactory0("REDUNDANT_INTERPOLATION_PREFIX", WARNING, SourceElementPositioningStrategies.DEFAULT, PsiElement::class)
+    val WRAPPED_LHS_IN_ASSIGNMENT: KtDiagnosticFactoryForDeprecation0 = KtDiagnosticFactoryForDeprecation0("WRAPPED_LHS_IN_ASSIGNMENT", ForbidParenthesizedLhsInAssignments, SourceElementPositioningStrategies.OUTERMOST_PARENTHESES_IN_ASSIGNMENT_LHS, PsiElement::class)
 
     // Unresolved
     val INVISIBLE_REFERENCE: KtDiagnosticFactory3<FirBasedSymbol<*>, Visibility, ClassId?> = KtDiagnosticFactory3("INVISIBLE_REFERENCE", ERROR, SourceElementPositioningStrategies.REFERENCE_BY_QUALIFIED, PsiElement::class)
@@ -196,12 +198,12 @@ object FirErrors {
     val ERROR_FROM_JAVA_RESOLUTION: KtDiagnosticFactory0 = KtDiagnosticFactory0("ERROR_FROM_JAVA_RESOLUTION", ERROR, SourceElementPositioningStrategies.DEFAULT, PsiElement::class)
     val MISSING_STDLIB_CLASS: KtDiagnosticFactory0 = KtDiagnosticFactory0("MISSING_STDLIB_CLASS", ERROR, SourceElementPositioningStrategies.DEFAULT, PsiElement::class)
     val NO_THIS: KtDiagnosticFactory0 = KtDiagnosticFactory0("NO_THIS", ERROR, SourceElementPositioningStrategies.DEFAULT, PsiElement::class)
-    val DEPRECATION_ERROR: KtDiagnosticFactory2<FirBasedSymbol<*>, String> = KtDiagnosticFactory2("DEPRECATION_ERROR", ERROR, SourceElementPositioningStrategies.REFERENCED_NAME_BY_QUALIFIED, PsiElement::class)
-    val DEPRECATION: KtDiagnosticFactory2<FirBasedSymbol<*>, String> = KtDiagnosticFactory2("DEPRECATION", WARNING, SourceElementPositioningStrategies.REFERENCED_NAME_BY_QUALIFIED, PsiElement::class)
-    val VERSION_REQUIREMENT_DEPRECATION_ERROR: KtDiagnosticFactory4<FirBasedSymbol<*>, Version, String, String> = KtDiagnosticFactory4("VERSION_REQUIREMENT_DEPRECATION_ERROR", ERROR, SourceElementPositioningStrategies.REFERENCED_NAME_BY_QUALIFIED, PsiElement::class)
-    val VERSION_REQUIREMENT_DEPRECATION: KtDiagnosticFactory4<FirBasedSymbol<*>, Version, String, String> = KtDiagnosticFactory4("VERSION_REQUIREMENT_DEPRECATION", WARNING, SourceElementPositioningStrategies.REFERENCED_NAME_BY_QUALIFIED, PsiElement::class)
-    val TYPEALIAS_EXPANSION_DEPRECATION_ERROR: KtDiagnosticFactory3<FirBasedSymbol<*>, FirBasedSymbol<*>, String> = KtDiagnosticFactory3("TYPEALIAS_EXPANSION_DEPRECATION_ERROR", ERROR, SourceElementPositioningStrategies.REFERENCED_NAME_BY_QUALIFIED, PsiElement::class)
-    val TYPEALIAS_EXPANSION_DEPRECATION: KtDiagnosticFactory3<FirBasedSymbol<*>, FirBasedSymbol<*>, String> = KtDiagnosticFactory3("TYPEALIAS_EXPANSION_DEPRECATION", WARNING, SourceElementPositioningStrategies.REFERENCED_NAME_BY_QUALIFIED, PsiElement::class)
+    val DEPRECATION_ERROR: KtDiagnosticFactory2<FirBasedSymbol<*>, String> = KtDiagnosticFactory2("DEPRECATION_ERROR", ERROR, SourceElementPositioningStrategies.DEPRECATION, PsiElement::class)
+    val DEPRECATION: KtDiagnosticFactory2<FirBasedSymbol<*>, String> = KtDiagnosticFactory2("DEPRECATION", WARNING, SourceElementPositioningStrategies.DEPRECATION, PsiElement::class)
+    val VERSION_REQUIREMENT_DEPRECATION_ERROR: KtDiagnosticFactory4<FirBasedSymbol<*>, Version, String, String> = KtDiagnosticFactory4("VERSION_REQUIREMENT_DEPRECATION_ERROR", ERROR, SourceElementPositioningStrategies.DEPRECATION, PsiElement::class)
+    val VERSION_REQUIREMENT_DEPRECATION: KtDiagnosticFactory4<FirBasedSymbol<*>, Version, String, String> = KtDiagnosticFactory4("VERSION_REQUIREMENT_DEPRECATION", WARNING, SourceElementPositioningStrategies.DEPRECATION, PsiElement::class)
+    val TYPEALIAS_EXPANSION_DEPRECATION_ERROR: KtDiagnosticFactory3<FirBasedSymbol<*>, FirBasedSymbol<*>, String> = KtDiagnosticFactory3("TYPEALIAS_EXPANSION_DEPRECATION_ERROR", ERROR, SourceElementPositioningStrategies.DEPRECATION, PsiElement::class)
+    val TYPEALIAS_EXPANSION_DEPRECATION: KtDiagnosticFactory3<FirBasedSymbol<*>, FirBasedSymbol<*>, String> = KtDiagnosticFactory3("TYPEALIAS_EXPANSION_DEPRECATION", WARNING, SourceElementPositioningStrategies.DEPRECATION, PsiElement::class)
     val API_NOT_AVAILABLE: KtDiagnosticFactory2<ApiVersion, ApiVersion> = KtDiagnosticFactory2("API_NOT_AVAILABLE", ERROR, SourceElementPositioningStrategies.SELECTOR_BY_QUALIFIED, PsiElement::class)
     val UNRESOLVED_REFERENCE_WRONG_RECEIVER: KtDiagnosticFactory1<Collection<FirBasedSymbol<*>>> = KtDiagnosticFactory1("UNRESOLVED_REFERENCE_WRONG_RECEIVER", ERROR, SourceElementPositioningStrategies.REFERENCE_BY_QUALIFIED, PsiElement::class)
     val UNRESOLVED_IMPORT: KtDiagnosticFactory1<String> = KtDiagnosticFactory1("UNRESOLVED_IMPORT", ERROR, SourceElementPositioningStrategies.IMPORT_LAST_NAME, PsiElement::class)
@@ -226,8 +228,6 @@ object FirErrors {
     val PLUGIN_AMBIGUOUS_INTERCEPTED_SYMBOL: KtDiagnosticFactory1<List<String>> = KtDiagnosticFactory1("PLUGIN_AMBIGUOUS_INTERCEPTED_SYMBOL", ERROR, SourceElementPositioningStrategies.DEFAULT, PsiElement::class)
     val RESOLUTION_TO_CLASSIFIER: KtDiagnosticFactory1<FirRegularClassSymbol> = KtDiagnosticFactory1("RESOLUTION_TO_CLASSIFIER", ERROR, SourceElementPositioningStrategies.DEFAULT, PsiElement::class)
     val AMBIGUOUS_ALTERED_ASSIGN: KtDiagnosticFactory1<List<String?>> = KtDiagnosticFactory1("AMBIGUOUS_ALTERED_ASSIGN", ERROR, SourceElementPositioningStrategies.DEFAULT, PsiElement::class)
-    val FORBIDDEN_BINARY_MOD: KtDiagnosticFactory2<FirBasedSymbol<*>, String> = KtDiagnosticFactory2("FORBIDDEN_BINARY_MOD", ERROR, SourceElementPositioningStrategies.OPERATOR_MODIFIER, PsiElement::class)
-    val DEPRECATED_BINARY_MOD: KtDiagnosticFactory2<FirBasedSymbol<*>, String> = KtDiagnosticFactory2("DEPRECATED_BINARY_MOD", ERROR, SourceElementPositioningStrategies.OPERATOR_MODIFIER, PsiElement::class)
     val SELF_CALL_IN_NESTED_OBJECT_CONSTRUCTOR_ERROR: KtDiagnosticFactory0 = KtDiagnosticFactory0("SELF_CALL_IN_NESTED_OBJECT_CONSTRUCTOR_ERROR", ERROR, SourceElementPositioningStrategies.DEFAULT, PsiElement::class)
 
     // Super
@@ -321,6 +321,7 @@ object FirErrors {
     val ANNOTATION_ON_SUPERCLASS: KtDiagnosticFactoryForDeprecation0 = KtDiagnosticFactoryForDeprecation0("ANNOTATION_ON_SUPERCLASS", ProhibitUseSiteTargetAnnotationsOnSuperTypes, SourceElementPositioningStrategies.DEFAULT, KtAnnotationEntry::class)
     val RESTRICTED_RETENTION_FOR_EXPRESSION_ANNOTATION: KtDiagnosticFactoryForDeprecation0 = KtDiagnosticFactoryForDeprecation0("RESTRICTED_RETENTION_FOR_EXPRESSION_ANNOTATION", RestrictRetentionForExpressionAnnotations, SourceElementPositioningStrategies.DEFAULT, PsiElement::class)
     val WRONG_ANNOTATION_TARGET: KtDiagnosticFactory2<String, Collection<KotlinTarget>> = KtDiagnosticFactory2("WRONG_ANNOTATION_TARGET", ERROR, SourceElementPositioningStrategies.DEFAULT, KtAnnotationEntry::class)
+    val WRONG_ANNOTATION_TARGET_WARNING: KtDiagnosticFactory2<String, Collection<KotlinTarget>> = KtDiagnosticFactory2("WRONG_ANNOTATION_TARGET_WARNING", WARNING, SourceElementPositioningStrategies.DEFAULT, KtAnnotationEntry::class)
     val WRONG_ANNOTATION_TARGET_WITH_USE_SITE_TARGET: KtDiagnosticFactory3<String, String, Collection<KotlinTarget>> = KtDiagnosticFactory3("WRONG_ANNOTATION_TARGET_WITH_USE_SITE_TARGET", ERROR, SourceElementPositioningStrategies.DEFAULT, KtAnnotationEntry::class)
     val INAPPLICABLE_TARGET_ON_PROPERTY: KtDiagnosticFactory1<String> = KtDiagnosticFactory1("INAPPLICABLE_TARGET_ON_PROPERTY", ERROR, SourceElementPositioningStrategies.DEFAULT, KtAnnotationEntry::class)
     val INAPPLICABLE_TARGET_ON_PROPERTY_WARNING: KtDiagnosticFactory1<String> = KtDiagnosticFactory1("INAPPLICABLE_TARGET_ON_PROPERTY_WARNING", WARNING, SourceElementPositioningStrategies.DEFAULT, KtAnnotationEntry::class)
@@ -356,7 +357,7 @@ object FirErrors {
     val OPT_IN_CAN_ONLY_BE_USED_AS_ANNOTATION: KtDiagnosticFactory0 = KtDiagnosticFactory0("OPT_IN_CAN_ONLY_BE_USED_AS_ANNOTATION", ERROR, SourceElementPositioningStrategies.DEFAULT, PsiElement::class)
     val OPT_IN_MARKER_CAN_ONLY_BE_USED_AS_ANNOTATION_OR_ARGUMENT_IN_OPT_IN: KtDiagnosticFactory0 = KtDiagnosticFactory0("OPT_IN_MARKER_CAN_ONLY_BE_USED_AS_ANNOTATION_OR_ARGUMENT_IN_OPT_IN", ERROR, SourceElementPositioningStrategies.DEFAULT, PsiElement::class)
     val OPT_IN_WITHOUT_ARGUMENTS: KtDiagnosticFactory0 = KtDiagnosticFactory0("OPT_IN_WITHOUT_ARGUMENTS", WARNING, SourceElementPositioningStrategies.DEFAULT, KtAnnotationEntry::class)
-    val OPT_IN_ARGUMENT_IS_NOT_MARKER: KtDiagnosticFactory1<ClassId> = KtDiagnosticFactory1("OPT_IN_ARGUMENT_IS_NOT_MARKER", WARNING, SourceElementPositioningStrategies.DEFAULT, KtAnnotationEntry::class)
+    val OPT_IN_ARGUMENT_IS_NOT_MARKER: KtDiagnosticFactory1<ClassId> = KtDiagnosticFactory1("OPT_IN_ARGUMENT_IS_NOT_MARKER", WARNING, SourceElementPositioningStrategies.DEFAULT, KtClassLiteralExpression::class)
     val OPT_IN_MARKER_WITH_WRONG_TARGET: KtDiagnosticFactory1<String> = KtDiagnosticFactory1("OPT_IN_MARKER_WITH_WRONG_TARGET", ERROR, SourceElementPositioningStrategies.DEFAULT, KtAnnotationEntry::class)
     val OPT_IN_MARKER_WITH_WRONG_RETENTION: KtDiagnosticFactory0 = KtDiagnosticFactory0("OPT_IN_MARKER_WITH_WRONG_RETENTION", ERROR, SourceElementPositioningStrategies.DEFAULT, KtAnnotationEntry::class)
     val OPT_IN_MARKER_ON_WRONG_TARGET: KtDiagnosticFactory1<String> = KtDiagnosticFactory1("OPT_IN_MARKER_ON_WRONG_TARGET", ERROR, SourceElementPositioningStrategies.DEFAULT, KtAnnotationEntry::class)

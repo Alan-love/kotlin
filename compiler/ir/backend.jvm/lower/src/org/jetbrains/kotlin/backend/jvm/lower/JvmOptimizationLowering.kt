@@ -28,13 +28,10 @@ import org.jetbrains.kotlin.ir.expressions.impl.*
 import org.jetbrains.kotlin.ir.symbols.impl.IrVariableSymbolImpl
 import org.jetbrains.kotlin.ir.types.*
 import org.jetbrains.kotlin.ir.util.*
-import org.jetbrains.kotlin.ir.visitors.IrElementTransformer
+import org.jetbrains.kotlin.ir.visitors.IrTransformer
 import org.jetbrains.kotlin.util.OperatorNameConventions
 
-@PhaseDescription(
-    name = "JvmOptimizationLowering",
-    description = "Optimize code for JVM code generation"
-)
+@PhaseDescription(name = "JvmOptimizationLowering")
 internal class JvmOptimizationLowering(val context: JvmBackendContext) : FileLoweringPass {
     private companion object {
         private fun isNegation(expression: IrExpression): Boolean =
@@ -80,7 +77,7 @@ internal class JvmOptimizationLowering(val context: JvmBackendContext) : FileLow
     private inner class Transformer(
         private val fileEntry: IrFileEntry,
         private val inlineScopeResolver: IrInlineScopeResolver
-    ) : IrElementTransformer<IrDeclaration?> {
+    ) : IrTransformer<IrDeclaration?>() {
 
         private val dontTouchTemporaryVals = HashSet<IrVariable>()
 

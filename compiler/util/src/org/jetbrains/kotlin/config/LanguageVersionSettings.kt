@@ -324,7 +324,6 @@ enum class LanguageFeature(
     ProhibitTypealiasAsCallableQualifierInImport(KOTLIN_2_1, kind = BUG_FIX), // KT-64350
     ProhibitConstructorAndSupertypeOnTypealiasWithTypeProjection(KOTLIN_2_1, kind = BUG_FIX), // KT-60305
     JsExternalPropertyParameters(KOTLIN_2_1), // KT-65965
-    ErrorAboutDataClassCopyVisibilityChange(KOTLIN_2_1, kind = BUG_FIX), // KT-11914 Deprecation phase 2
     CorrectSpecificityCheckForSignedAndUnsigned(KOTLIN_2_1, kind = OTHER), // KT-35305
     AllowAccessToProtectedFieldFromSuperCompanion(KOTLIN_2_1), // KT-39868
     CheckLambdaAgainstTypeVariableContradictionInResolution(KOTLIN_2_1, kind = OTHER), // KT-58310
@@ -350,6 +349,7 @@ enum class LanguageFeature(
 
     // 2.2
 
+    ErrorAboutDataClassCopyVisibilityChange(KOTLIN_2_2, kind = BUG_FIX), // KT-11914 Deprecation phase 2
     BreakContinueInInlineLambdas(KOTLIN_2_2), // KT-1436
     UnstableSmartcastOnDelegatedProperties(KOTLIN_2_2, kind = BUG_FIX), // KT-57417
     ReferencesToSyntheticJavaProperties(KOTLIN_2_2), // KT-8575
@@ -359,6 +359,8 @@ enum class LanguageFeature(
     ForbidReifiedTypeParametersOnTypeAliases(KOTLIN_2_2, kind = BUG_FIX), // KT-70163
     ForbidProjectionsInAnnotationProperties(KOTLIN_2_2, kind = BUG_FIX), // KT-70002
     ForbidJvmAnnotationsOnAnnotationParameters(KOTLIN_2_2, kind = BUG_FIX), // KT-25861
+    ForbidFieldAnnotationsOnAnnotationParameters(KOTLIN_2_2, kind = BUG_FIX), // KT-70233
+    ForbidParenthesizedLhsInAssignments(KOTLIN_2_2, kind = BUG_FIX), // KT-70507
 
     // 2.3
 
@@ -436,6 +438,7 @@ enum class LanguageFeature(
     ProperFieldAccessGenerationForFieldAccessShadowedByKotlinProperty(sinceVersion = null, kind = OTHER), // KT-56386
     WhenGuards(sinceVersion = null, kind = OTHER), // KT-13626
     MultiDollarInterpolation(sinceVersion = null, kind = OTHER), // KT-2425
+    IrInlinerBeforeKlibSerialization(sinceVersion = null, kind = UNSTABLE_FEATURE), // KT-69765
     ;
 
     init {

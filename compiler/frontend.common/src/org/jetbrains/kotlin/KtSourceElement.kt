@@ -408,6 +408,11 @@ sealed class KtFakeSourceElementKind(final override val shouldSkipErrorTypeRepor
     sealed class DesugaredIncrementOrDecrement(val generatedElementKind: GeneratedElementKind) : KtFakeSourceElementKind() {
         enum class GeneratedElementKind {
             /**
+             * The primary receiver expression.
+             */
+            PrimaryReceiver,
+
+            /**
              * The desugared block, assignment, operator call, or other main expressions.
              */
             DesugaredExpression,
@@ -465,6 +470,12 @@ sealed class KtFakeSourceElementKind(final override val shouldSkipErrorTypeRepor
          */
         val isSecondGetReference: Boolean
             get() = generatedElementKind == GeneratedElementKind.SecondGetReference
+
+        /**
+         * @see GeneratedElementKind.PrimaryReceiver
+         */
+        val forPrimaryReceiver: DesugaredIncrementOrDecrement
+            get() = withGeneratedElementKind(GeneratedElementKind.PrimaryReceiver)
 
         /**
          * @see GeneratedElementKind.ReceiverVariable
@@ -736,6 +747,13 @@ sealed class KtFakeSourceElementKind(final override val shouldSkipErrorTypeRepor
      * for annotation moved to another element due to annotation use-site target
      */
     object FromUseSiteTarget : KtFakeSourceElementKind()
+
+    /**
+     * for annotation on constructor property when the use site target allows both the parameter and the property,
+     * in that case the annotation on the parameter keeps the real source kind and the copy on the property
+     * gets this fake kind.
+     */
+    object AnnotationCopyFromConstructorParameter : KtFakeSourceElementKind()
 
     /**
      * for `@ParameterName` annotation call added to function types with names in the notation

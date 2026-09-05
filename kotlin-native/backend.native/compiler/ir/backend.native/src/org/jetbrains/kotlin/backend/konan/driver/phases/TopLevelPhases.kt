@@ -15,6 +15,7 @@ import org.jetbrains.kotlin.backend.common.phaser.IrValidationAfterInliningPriva
 import org.jetbrains.kotlin.backend.common.phaser.IrValidationAfterLoweringsSecondStagePhase
 import org.jetbrains.kotlin.backend.common.phaser.IrValidationBeforeLoweringsKlibSecondStagePhase
 import org.jetbrains.kotlin.backend.common.phaser.PhaseEngine
+import org.jetbrains.kotlin.backend.common.phaser.createFilePhases
 import org.jetbrains.kotlin.backend.common.phaser.createModulePhases
 import org.jetbrains.kotlin.backend.konan.*
 import org.jetbrains.kotlin.backend.konan.driver.PerformanceManagerContext
@@ -185,9 +186,9 @@ internal fun <C : NativeBackendPhaseContext> PhaseEngine<C>.runBackend(backendCo
                 // invariant, we would like to put a synchronization point immediately before "InlineAllFunctions".
                 fragmentWithState.runSpecifiedLowerings(getLoweringsUpToAndIncludingSyntheticAccessors())
                 fragmentWithState.runSpecifiedLowering(::IrValidationAfterInliningPrivateFunctionsKlibPhase)
-                fragmentWithState.runSpecifiedLowerings(createNativePhases(::NativeAllFunctionInlining))
+                fragmentWithState.runSpecifiedLowerings(createFilePhases(::NativeAllFunctionInlining))
                 fragmentWithState.runSpecifiedLowerings(
-                        createNativePhases(::SpecialObjCValidationLowering, ::RedundantCastsRemoverLowering)
+                        createFilePhases(::SpecialObjCValidationLowering, ::RedundantCastsRemoverLowering)
                 )
             }
 
@@ -423,10 +424,6 @@ internal fun PhaseEngine<NativeGenerationState>.compileModule(
 }
 
 internal fun PhaseEngine<NativeGenerationState>.runPostCodegen() {
-    val checkExternalCalls = context.config.checkStateAtExternalCalls
-    if (checkExternalCalls) {
-        runAndMeasurePhase(CheckExternalCallsPhase)
-    }
     newEngine(context as BitcodePostProcessingContext) { it.runBitcodePostProcessing() }
     if (context.config.produce.isFullCache) {
         runAndMeasurePhase(SaveAdditionalCacheInfoPhase)
@@ -553,7 +550,7 @@ private fun PhaseEngine<NativeGenerationState>.runCodegen(module: IrModuleFragme
     runLowerings(
             // Have to run after link dependencies phase, because fields from dependencies can be changed during lowerings.
             // Inline accessors only in optimized builds due to separate compilation and possibility to get broken debug information.
-            createNativePhases(
+            createFilePhases(
                     ::PropertyAccessorInlineLowering.takeIf { optimize },
                     ::InlineClassPropertyAccessorsLowering.takeIf { optimize },
             ),
@@ -567,7 +564,7 @@ private fun PhaseEngine<NativeGenerationState>.runCodegen(module: IrModuleFragme
     runAndMeasurePhase(RemoveRedundantCallsToStaticInitializersPhase, RedundantCallsInput(moduleDFG, module), disable = enablePreCodegenInliner || !runGlobalOptimizations)
     runAndMeasurePhase(DevirtualizationPhase, DevirtualizationInput(module, moduleDFG), disable = !runGlobalOptimizations)
     runLowerings(
-            createNativePhases(
+            createFilePhases(
                     ::RedundantCoercionsCleaner,
                     ::UnboxInlineLowering.takeIf { optimize },
             ),
@@ -576,7 +573,7 @@ private fun PhaseEngine<NativeGenerationState>.runCodegen(module: IrModuleFragme
     runAndMeasurePhase(PreCodegenInlinerPhase, PreCodegenInlinerInput(module, moduleDFG), disable = !enablePreCodegenInliner)
     val dceResult = runAndMeasurePhase(DCEPhase, DCEInput(module, moduleDFG), disable = !runGlobalOptimizations)
     runLowerings(
-            createNativePhases(
+            createFilePhases(
                     ::CoroutinesVarSpillingLowering,
             ),
             module,

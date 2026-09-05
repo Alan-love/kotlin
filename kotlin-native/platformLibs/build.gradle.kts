@@ -18,7 +18,6 @@ import org.jetbrains.kotlin.utils.reproducibilityCompilerFlags
 
 plugins {
     id("common-configuration")
-    id("test-federation-convention")
     id("com.autonomousapps.dependency-analysis")
     id("base")
     id("platform-manager")
@@ -55,7 +54,9 @@ private val cachePlatformLibsSemaphore = gradle.sharedServices.registerIfAbsent(
 // endregion
 
 if (HostManager.host == KonanTarget.MACOS_ARM64) {
-    project.configureJvmToolchain(JdkMajorVersion.JDK_17_0)
+    project.jvmToolchains {
+        jdkVersion = JdkMajorVersion.JDK_17_0
+    }
 }
 
 val cacheableTargetNames = platformManager.hostPlatform.cacheableTargets

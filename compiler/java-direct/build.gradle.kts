@@ -3,18 +3,17 @@ description = "Kotlin Java Direct Compiler Plugin"
 
 plugins {
     id("common-configuration")
-    id("test-federation-convention")
     id("com.autonomousapps.dependency-analysis")
     kotlin("jvm")
     id("test-inputs-check")
     id("java-test-fixtures")
-    id("project-tests-convention")
 }
 
 dependencies {
     api(project(":core:compiler.common.jvm"))
 
     compileOnly(intellijCore())
+    compileOnly(libs.intellij.asm)
     implementation(project(":compiler:frontend.common.jvm"))
     implementation(project(":compiler:plugin-api"))
     implementation(project(":compiler:cli"))

@@ -477,6 +477,12 @@ extension main.Bazzable where Self : main.__Bazzable {
 }
 extension main.Bazzable {
 }
+extension main.ContainerProtocol {
+    public func foo() -> Swift.Void {
+        let receiver = self
+        return main.foo(receiver)
+    }
+}
 @_documentation(visibility: internal)
 extension main.ContainerProtocol where Self : main.__ContainerProtocol {
 }
@@ -514,7 +520,10 @@ extension ExportedKotlinPackages.repeating_conformances.Foeble {
 @_documentation(visibility: internal)
 extension main.SealedBazzable where Self : main.__SealedBazzable {
     public func sealedType() -> main.SealedBazzable_SealedType {
-        fatalError("must implement sealedType in subclass")
+        switch self {
+        case let value as main.SomeBazzable: .someBazzable(.init(value))
+        default: fatalError("missing sealedType for \(self)")
+        }
     }
 }
 extension main.SealedBazzable {
@@ -526,7 +535,12 @@ extension main.SealedBazzable {
 @_documentation(visibility: internal)
 extension main.SealedFoeble where Self : main.__SealedFoeble {
     public func sealedType() -> main.SealedFoeble_SealedType {
-        fatalError("must implement sealedType in subclass")
+        switch self {
+        case let value as main.SealedBazzable: .sealedBazzable(value.sealedType())
+        case let value as main._SealedFoeble_SealedBarable: .sealedBarable(value.sealedType())
+        case let value as main._SealedFoeble_SomeFoeble: .someFoeble(.init(value))
+        default: fatalError("missing sealedType for \(self)")
+        }
     }
 }
 extension main.SealedFoeble {
@@ -548,6 +562,12 @@ extension ExportedKotlinPackages.packagewithprotocols.SiblingProtocol where Self
 }
 extension ExportedKotlinPackages.packagewithprotocols.SiblingProtocol {
     public typealias NestedClass = main._ExportedKotlinPackages_packagewithprotocols_SiblingProtocol_NestedClass
+}
+extension main._ContainerProtocol_NestedProtocol {
+    public func foo() -> Swift.Void {
+        let receiver = self
+        return main.foo(receiver)
+    }
 }
 @_documentation(visibility: internal)
 extension main._ContainerProtocol_NestedProtocol where Self : main.___ContainerProtocol_NestedProtocol {
@@ -648,13 +668,28 @@ extension KotlinRuntimeSupport._KotlinExistentialPenBox: main.__ExportedKotlinPa
 @_documentation(visibility: internal)
 extension main._SealedFoeble_SealedBarable where Self : main.___SealedFoeble_SealedBarable {
     public func sealedType() -> main.SealedBarable_SealedType {
-        fatalError("must implement sealedType in subclass")
+        switch self {
+        case let value as main._SealedFoeble_SomeBarable: .someBarable(.init(value))
+        default: fatalError("missing sealedType for \(self)")
+        }
     }
 }
 extension main._SealedFoeble_SealedBarable {
     @_disfavoredOverload
     public func sealedType() -> main.SealedFoeble_SealedType {
         .sealedBarable(sealedType())
+    }
+}
+extension main._SiblingProtocol_NestedClass {
+    public func foo() -> Swift.Void {
+        let receiver = self
+        return main.foo(receiver)
+    }
+}
+extension main.__ContainerProtocol_NestedProtocol_NestedClass {
+    public func foo() -> Swift.Void {
+        let receiver = self
+        return main.foo(receiver)
     }
 }
 extension ExportedKotlinPackages.packagewithprotocols {

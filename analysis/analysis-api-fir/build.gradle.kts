@@ -3,12 +3,10 @@ import org.jetbrains.kotlin.testFederation.smokeTestConfig
 
 plugins {
     id("common-configuration")
-    id("test-federation-convention")
     id("com.autonomousapps.dependency-analysis")
     kotlin("jvm")
     id("generated-sources")
     id("java-test-fixtures")
-    id("project-tests-convention")
     id("test-data-manager")
     id("test-inputs-check")
 }
@@ -93,6 +91,7 @@ projectTests {
     withMockJdkAnnotationsJar()
     withScriptRuntime()
     withPluginSandboxAnnotations()
+    withPluginSandboxJar()
     withWasmRuntime()
 
     @OptIn(KotlinCompilerDistUsage::class)

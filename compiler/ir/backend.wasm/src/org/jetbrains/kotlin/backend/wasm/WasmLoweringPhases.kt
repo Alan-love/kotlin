@@ -16,7 +16,6 @@ import org.jetbrains.kotlin.backend.wasm.lower.*
 import org.jetbrains.kotlin.config.LanguageFeature
 import org.jetbrains.kotlin.config.LanguageVersionSettings
 import org.jetbrains.kotlin.config.phaser.NamedCompilerPhase
-import org.jetbrains.kotlin.ir.backend.js.JsCommonBackendContext
 import org.jetbrains.kotlin.ir.backend.js.lower.*
 import org.jetbrains.kotlin.ir.backend.js.lower.inline.RemoveInlineDeclarationsWithReifiedTypeParametersLowering
 import org.jetbrains.kotlin.ir.declarations.IrModuleFragment
@@ -67,13 +66,9 @@ private fun createDefaultParameterCleanerPhase(context: CommonBackendContext): D
     return DefaultParameterCleaner(context)
 }
 
-private fun createAutoboxingTransformerPhase(context: JsCommonBackendContext): AutoboxingTransformer {
-    return AutoboxingTransformer(context)
-}
-
 //@PhasePrerequisites(FunctionInlining::class) // This prerequisite is hard to represent for common lowering
 private fun createConstEvaluationPhase(context: CommonBackendContext): ConstEvaluationLowering {
-    return ConstEvaluationLowering(context, isFloatingPointOptimizationEnabled = false)
+    return ConstEvaluationLowering(context)
 }
 
 fun wasmLoweringsOfTheFirstPhase(
@@ -218,7 +213,7 @@ val wasmLowerings: List<NamedCompilerPhase<WasmBackendContext, IrModuleFragment,
     // Replace builtins before autoboxing
     ::BuiltInsLowering,
 
-    ::createAutoboxingTransformerPhase,
+    ::WasmAutoboxingTransformer,
 
     ::ObjectUsageLowering,
     ::WasmPurifyObjectInstanceGettersLowering,
